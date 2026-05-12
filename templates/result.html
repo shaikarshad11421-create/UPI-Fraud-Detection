@@ -1,0 +1,70 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            width: 350px;
+            margin: 100px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .fraud {
+            color: red;
+        }
+
+        .safe {
+            color: green;
+        }
+
+        ul {
+            text-align: left;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #185a9d;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h2>🔍 Result</h2>
+
+    <h3>Score: {{ score }}%</h3>
+
+    {% if prediction == 1 %}
+        <h2 class="fraud">🔴 FRAUD DETECTED</h2>
+    {% else %}
+        <h2 class="safe">🟢 SAFE TRANSACTION</h2>
+    {% endif %}
+
+    <h3>🧠 Reasons:</h3>
+    <ul>
+        {% for r in reasons %}
+            <li>{{ r }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

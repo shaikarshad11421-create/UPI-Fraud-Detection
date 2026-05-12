@@ -1,0 +1,61 @@
+ @app.route('/heatmap')
+def heatmap():
+
+    if 'user' not in session:
+        return redirect('/login')
+
+    try:
+        rows = get_all_transactions()
+
+        city_coords = {
+            "hyderabad": [17.3850, 78.4867],
+            "bangalore": [12.9716, 77.5946],
+            "chennai": [13.0827, 80.2707],
+            "mumbai": [19.0760, 72.8777],
+            "delhi": [28.7041, 77.1025],
+            "kolkata": [22.5726, 88.3639]
+        }
+
+        fraud_map = {}
+
+        # 🔥 SAFE LOOP
+        for r in rows:
+            if len(r) < 7:
+                continue
+
+            location = str(r[5]).lower().strip()
+            prediction = r[6]
+
+            try:
+                prediction = int(prediction)
+            except:
+                continue
+
+            if prediction == 1:
+                fraud_map[location] = fraud_map.get(location, 0) + 1
+
+        m = folium.Map(location=[22.9734, 78.6569], zoom_start=5)
+
+        for city, count in fraud_map.items():
+            if city in city_coords:
+
+                lat, lon = city_coords[city]
+
+                folium.Circle(
+                    location=[lat, lon],
+                    radius=20000 * count,
+                    color="red",
+                    fill=True,
+                    fill_opacity=0.6,
+                    popup=f"{city}: {count}"
+                ).add_to(m)
+
+        os.makedirs("static", exist_ok=True)
+
+        m.save("static/map.html")
+
+        # 🔥 IMPORTANT FIX
+        return redirect("/static/map.html")
+
+    except Exception as e:
+        return f"Heatmap Error: {str(e)}"
