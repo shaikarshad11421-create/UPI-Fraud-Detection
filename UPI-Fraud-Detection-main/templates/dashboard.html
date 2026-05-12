@@ -1,0 +1,134 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: #eef2f7;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px;
+        }
+
+        .card {
+            padding: 20px;
+            width: 180px;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .fraud {
+            background: #e74c3c;
+        }
+
+        .safe {
+            background: #2ecc71;
+        }
+
+        table {
+            width: 80%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .fraud-text {
+            color: red;
+            font-weight: bold;
+        }
+
+        .safe-text {
+            color: green;
+            font-weight: bold;
+        }
+
+        a {
+            display: block;
+            margin: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>📊 Dashboard</h2>
+
+<div class="cards">
+    <div class="card fraud">
+        Fraud<br>{{ fraud_count }}
+    </div>
+
+    <div class="card safe">
+        Safe<br>{{ safe_count }}
+    </div>
+</div>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Amount</th>
+<th>Hour</th>
+<th>Velocity</th>
+<th>User</th>
+<th>Status</th>
+<th>Score</th>
+</tr>
+
+{% for r in rows %}
+<tr>
+<td>{{ r[0] }}</td>
+<td>{{ r[1] }}</td>
+<td>{{ r[2] }}</td>
+<td>{{ r[3] }}</td>
+<td>{{ 'New' if r[4]==1 else 'Existing' }}</td>
+
+<td>
+{% if r[5]==1 %}
+<span class="fraud-text">Fraud</span>
+{% else %}
+<span class="safe-text">Safe</span>
+{% endif %}
+</td>
+
+<td>{{ r[6] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<a href="/">⬅ Back</a>
+
+</body>
+</html>

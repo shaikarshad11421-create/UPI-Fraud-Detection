@@ -1,0 +1,49 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>AI Assistant Chat</title>
+</head>
+<body>
+
+<h2>🤖 AI Assistant Chat</h2>
+
+<!-- Chat box -->
+<div id="chatBox" style="border:1px solid #ccc; height:300px; overflow:auto; padding:10px;"></div>
+
+<br>
+
+<!-- Input -->
+<input type="text" id="question" placeholder="Ask anything..." style="width:300px;">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+function sendMessage() {
+    let q = document.getElementById("question").value;
+
+    if (!q) return;
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: q })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById("chatBox").innerHTML +=
+            "<p><b>You:</b> " + q + "</p>" +
+            "<p><b>AI:</b> " + data.answer + "</p><hr>";
+
+        document.getElementById("question").value = "";
+    })
+    .catch(error => {
+        document.getElementById("chatBox").innerHTML +=
+            "<p style='color:red;'>Error connecting to AI</p>";
+    });
+}
+</script>
+
+</body>
+</html>
